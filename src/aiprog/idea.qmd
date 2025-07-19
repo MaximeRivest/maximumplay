@@ -1,0 +1,92 @@
+# The information flow
+
+A user has a task/goal/intent. They can specify it very clearly with a combination of these:
+
+* Examples (of what to do but could also be of what not to do)
+* Inputs/Output specifications
+* Metric/evaluation/rubric/judge/score
+* Story/Instructions/hints/persona (analogies: do x like y)
+
+Any of these could in theory be sufficient for a very intelligent entity to complete the task.
+
+## Examples
+
+Take the task of applying French Canadian translation to written English text.
+
+This should be enough for a talented human to find the pattern and comply.
+```{python}
+example_of_success = {
+    'english': [
+        "I'm going to the convenience store.",
+        "It's really cold out today.",
+        "Can you help me move this weekend?",
+        "We were stuck in traffic for two hours.",
+        "She’s my girlfriend.",
+        "That car is so cool!",
+        "I’ll call you tonight.",
+        "He’s always bragging.",
+        "We grabbed a coffee at Tim’s.",
+        "Close the window, it’s chilly.",
+        "I have an appointment at 3.",
+        "They’re celebrating their birthday.",
+        "I parked in the back.",
+        "The metro is packed.",
+        "We watched a movie last night.",
+        "I need to do my groceries.",
+        "Don’t forget your boots.",
+        "It’s snowing again.",
+        "I’ll take the bus.",
+        "We’re out of milk."
+    ],
+    'french': [
+        "Je m’en vais au dépanneur.",
+        "Il fait frette en maudit aujourd’hui.",
+        "Tu peux m’aider à déménager ce weekend?",
+        "On était pognés dans le trafic pendant deux heures.",
+        "C’est ma blonde.",
+        "C’est ben l’fun ce char-là!",
+        "Je vais t’appeler ce soir.",
+        "Il se vente tout l’temps.",
+        "On a pris un café au Tim.",
+        "Ferme la fenêtre, ça caille.",
+        "J’ai un rendez-vous à trois heures.",
+        "Ils fêtent leur fête.",
+        "J’ai stationné dans l’fond.",
+        "Le métro est plein à craquer.",
+        "On a écouté un film hier soir.",
+        "J’dois faire mon épicerie.",
+        "Oublie pas tes bottes.",
+        "Il neige encore.",
+        "J’va prendre l’bus.",
+        "On est à court de lait."
+    ]
+}
+```
+
+But very some other intelligent system it may not be enough and we could further clarify and flesh out the task specification by adding instructions, a judge, input/output schema.
+
+an instructions could look like this: 
+
+> Translate the following English sentences into colloquial Quebec French. Preserve the informal, spoken register—use contractions, regional vocabulary (e.g., “dépanneur”, “frette”, “blonde”), and typical Quebec French syntax. Do not translate proper nouns like “Tim’s” or anglicisms that are common in Quebec French (e.g., “weekend”). Keep the tone casual and conversational.
+
+a judge could have those instructions:
+
+> You are an expert Quebec French linguist. For each English sentence and its proposed French translation, evaluate:
+> 
+> 1. **Accuracy**: Does the French convey the same meaning as the English?
+> 2. **Register**: Is the tone appropriately informal/colloquial (not formal textbook French)?
+> 3. **Regional Vocabulary**: Does it use authentic Quebec French terms (e.g., "dépanneur", "frette", "blonde")?
+> 4. **Contractions**: Are natural Quebec French contractions used (e.g., "j'va", "t'", "y'a")?
+> 5. **Proper Nouns**: Are names like "Tim's" left untranslated?
+> 6. **Anglicisms**: Are common Quebec anglicisms preserved when appropriate (e.g., "weekend")?
+> Score each translation from 1-5 on these criteria, with 5 being perfect. Provide brief feedback on any issues.
+
+Or simply Input/Outputs specifications:
+
+> - **Input**: A plain-text string in English.
+> - **Output**: A single plain-text string in colloquial Quebec French that conveys the same meaning, using regional vocabulary, contractions, and anglicisms common in spoken Quebec French. No additional commentary or formatting.
+
+## DSPy's Signature
+
+DSPy's signatures concerns themselves only with the inputs/outputs and not with the examples nor the judge. There are 2 other distinct object for that. I think they should all be orgnanised together into a Task object.
+
