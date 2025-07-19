@@ -90,9 +90,16 @@ Maybe a missing element in the mentionned spec is that there could be an artifac
 
 ## DSPy's Signature
 
-DSPy's signatures concerns themselves only with the inputs/outputs and not with the examples nor the judge. There are 2 other distinct object for that. I think they should all be orgnanised together into a Task specification object.
+DSPy's signatures concern themselves only with the inputs and outputs and not with the examples or the judge. There are two other distinct objects for that. I think they should all be organized together into a task specification object.
 
-## A task specification object
+## A Task Specification Object
 
-A task specification object, would contain all above mentionned elements, and they would have versionning (a la git) and attributions, was the instructions deduced? If so from what and by what? An optimized 
+A task specification object would contain all the above-mentioned elements, and they would have versioning (à la git) and attributions. Were the instructions deduced? If so, from what and by what?
 
+One should be careful with the task specification object, as there is a fine line between specifying a task and optimizing a system that aims at completing the task successfully. A specification should be general; it should aim to be coherent, and brevity is better than verbosity. Anything that would not help the majority of Intelligent Entities in interpreting the task and successfully completing it should be a concern for the optimizer.
+
+## Optimization
+
+Optimization is a process where you take a working system—meaning it can, in theory, go from inputs to outputs, but it does not currently do so in a satisfactory way. It is not optimization to define and construct the task-completing system.
+
+---
