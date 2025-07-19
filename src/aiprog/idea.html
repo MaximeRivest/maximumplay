@@ -108,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
 <p>Take the task of applying French Canadian translation to written English text.</p>
 <p>This should be enough for a talented human to find the pattern and comply.</p>
-<div id="0a4ad07f" class="cell" data-execution_count="1">
+<div id="329f2126" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>example_of_success <span class="op">=</span> {</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'english'</span>: [</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"I'm going to the convenience store."</span>,</span>
@@ -180,6 +180,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Output</strong>: A single plain-text string in colloquial Quebec French that conveys the same meaning, using regional vocabulary, contractions, and anglicisms common in spoken Quebec French. No additional commentary or formatting.</li>
 </ul>
 </blockquote>
+<p>Maybe a missing element in the mentionned spec is that there could be an artifact that performs the task. If it is an opaque artifact, it can serve a similar purpose as the example, with the risk that it may be applied to the wrong input in the wrong ways. A transparent, understandable, or logical artifact contributes more to the clarity of the task specification, as instructions, examples, and input/output pairs can all be extracted from that type of artifact (a judge can also likely be trained). Interestingly, such an artifact does not solve the task forever, as we may wish to solve the task in more efficient ways or with different dependencies.</p>
 </section>
 <section id="dspys-signature" class="level2">
 <h2 class="anchored" data-anchor-id="dspys-signature">DSPy’s Signature</h2>

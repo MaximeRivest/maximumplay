@@ -86,6 +86,8 @@ Or simply Input/Outputs specifications:
 > - **Input**: A plain-text string in English.
 > - **Output**: A single plain-text string in colloquial Quebec French that conveys the same meaning, using regional vocabulary, contractions, and anglicisms common in spoken Quebec French. No additional commentary or formatting.
 
+Maybe a missing element in the mentionned spec is that there could be an artifact that performs the task. If it is an opaque artifact, it can serve a similar purpose as the example, with the risk that it may be applied to the wrong input in the wrong ways. A transparent, understandable, or logical artifact contributes more to the clarity of the task specification, as instructions, examples, and input/output pairs can all be extracted from that type of artifact (a judge can also likely be trained). Interestingly, such an artifact does not solve the task forever, as we may wish to solve the task in more efficient ways or with different dependencies.
+
 ## DSPy's Signature
 
 DSPy's signatures concerns themselves only with the inputs/outputs and not with the examples nor the judge. There are 2 other distinct object for that. I think they should all be orgnanised together into a Task object.
