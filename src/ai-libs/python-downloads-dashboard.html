@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Library Download Statistics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            min-width: 200px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #1e3c72;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            position: relative;
+            height: 450px;
+        }
+
+        #downloadsChart {
+            max-width: 100%;
+            max-height: 400px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            color: #2a5298;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+
+        .info {
+            background: #e7f3ff;
+            color: #0066cc;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Python Library Download Statistics</h1>
+        
+        <div class="controls">
+            <div class="input-group">
+                <input type="text" id="libraryInput" placeholder="Enter library names (comma-separated)" value="numpy, pandas, matplotlib, requests, flask">
+                <button id="fetchButton" onclick="fetchStats()">Fetch Statistics</button>
+            </div>
+            <div class="info" style="margin-top: 15px;">
+                <strong>Note:</strong> This uses the PyPI Stats API which provides download data for the last 180 days. Some packages may have limited or no data available.
+            </div>
+        </div>
+
+        <div id="errorContainer"></div>
+
+        <div class="chart-container" id="chartContainer" style="display: none;">
+            <canvas id="downloadsChart"></canvas>
+            <div class="legend" id="legend"></div>
+        </div>
+
+        <div class="stats-grid" id="statsGrid"></div>
+    </div>
+
+    <script>
+        let chart = null;
+        const colors = [
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+            '#FF9F40', '#FF6384', '#C9CBCF', '#4BC0C0', '#36A2EB'
+        ];
+
+        async function fetchStats() {
+            const button = document.getElementById('fetchButton');
+            const input = document.getElementById('libraryInput');
+            const errorContainer = document.getElementById('errorContainer');
+            const chartContainer = document.getElementById('chartContainer');
+            const statsGrid = document.getElementById('statsGrid');
+            
+            button.disabled = true;
+            button.textContent = 'Loading...';
+            errorContainer.innerHTML = '';
+            statsGrid.innerHTML = '';
+            
+            const libraries = input.value.split(',').map(lib => lib.trim()).filter(lib => lib);
+            
+            if (libraries.length === 0) {
+                showError('Please enter at least one library name');
+                button.disabled = false;
+                button.textContent = 'Fetch Statistics';
+                return;
+            }
+
+            try {
+                const allData = await Promise.all(
+                    libraries.map(async (library, index) => {
+                        try {
+                            // Using local proxy server to avoid CORS issues
+                            const response = await fetch(`http://localhost:8001/api/packages/${library}/recent`);
+                            
+                            if (!response.ok) {
+                                throw new Error(`Failed to fetch data for ${library}`);
+                            }
+                            
+                            const data = await response.json();
+                            return {
+                                library,
+                                data: data.data,
+                                color: colors[index % colors.length]
+                            };
+                        } catch (error) {
+                            console.error(`Error fetching ${library}:`, error);
+                            return {
+                                library,
+                                data: null,
+                                error: error.message,
+                                color: colors[index % colors.length]
+                            };
+                        }
+                    })
+                );
+
+                const validData = allData.filter(item => item.data);
+                
+                if (validData.length === 0) {
+                    showError('No valid data could be fetched. The libraries might not exist or the API might be unavailable.');
+                } else {
+                    displayChart(validData);
+                    displayStats(validData);
+                    chartContainer.style.display = 'block';
+                    
+                    // Show errors for failed libraries
+                    const failedLibraries = allData.filter(item => item.error);
+                    if (failedLibraries.length > 0) {
+                        const errorMessages = failedLibraries.map(item => 
+                            `Could not fetch data for "${item.library}"`
+                        ).join('<br>');
+                        showError(errorMessages, 'warning');
+                    }
+                }
+            } catch (error) {
+                showError('An unexpected error occurred: ' + error.message);
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Fetch Statistics';
+            }
+        }
+
+        function displayChart(libraryData) {
+            const ctx = document.getElementById('downloadsChart').getContext('2d');
+            const legendContainer = document.getElementById('legend');
+            
+            // Prepare data for chart
+            const datasets = libraryData.map(lib => {
+                const last30Days = lib.data.last_month || 0;
+                const last7Days = lib.data.last_week || 0;
+                const lastDay = lib.data.last_day || 0;
+                
+                return {
+                    label: lib.library,
+                    data: [lastDay, last7Days, last30Days],
+                    backgroundColor: lib.color,
+                    borderColor: lib.color,
+                    borderWidth: 2
+                };
+            });
+
+            // Destroy existing chart if it exists
+            if (chart) {
+                chart.destroy();
+            }
+
+            // Create bar chart
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Last Day', 'Last Week', 'Last Month'],
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 750
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Download Statistics Comparison',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Create custom legend
+            legendContainer.innerHTML = libraryData.map(lib => `
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: ${lib.color}"></div>
+                    <span>${lib.library}</span>
+                </div>
+            `).join('');
+        }
+
+        function displayStats(libraryData) {
+            const statsGrid = document.getElementById('statsGrid');
+            
+            statsGrid.innerHTML = libraryData.map(lib => {
+                const total = (lib.data.last_month || 0);
+                return `
+                    <div class="stat-card">
+                        <h3>${lib.library}</h3>
+                        <div class="number">${formatNumber(total)}</div>
+                        <p>downloads last month</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toLocaleString();
+        }
+
+        function showError(message, type = 'error') {
+            const errorContainer = document.getElementById('errorContainer');
+            const className = type === 'warning' ? 'info' : 'error';
+            errorContainer.innerHTML = `<div class="${className}">${message}</div>`;
+        }
+
+        // Load Chart.js
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js';
+        script.onload = () => {
+            // Fetch initial data when page loads
+            fetchStats();
+        };
+        document.head.appendChild(script);
+    </script>
+</body>
+</html>

@@ -9,7 +9,7 @@
 #%%
 import re
 import textwrap
-from typing import Any, Dict, NamedTuple, Optional, Type
+from typing import Any, Dict, Optional, Type, NamedTuple
 
 from litellm import ContextWindowExceededError
 from pydantic.fields import FieldInfo
@@ -18,24 +18,30 @@ from dspy.adapters.base import Adapter
 from dspy.adapters.utils import (
     format_field_value,
     get_annotation_name,
-    get_field_description_string,
     parse_value,
-    translate_field_type,
 )
 from dspy.clients.lm import LM
 from dspy.signatures.signature import Signature
 from dspy.utils.callback import BaseCallback
 from dspy.utils.exceptions import AdapterParseError
 
-field_header_pattern = re.compile(r"\[\[ ## (\w+) ## \]\]")
 
+# Sentinel that marks the end of a field block when there are **multiple** outputs
+END_SENTINEL = "<!-- end -->"
 
-class FieldInfoWithName(NamedTuple):
-    name: str
-    info: FieldInfo
+class MarkdownAdapter(Adapter):
+    """Markdown adapter for structured output using headings and sentinels.
 
+    Output format:
+    - Single field: Return value directly
+    - Multiple fields: Use markdown headings (# field_name) followed by content,
+      then <!-- end --> on its own line to mark the end of each field
+    """
 
-class ChatAdapter_md(Adapter):
+    # ──────────────────────────────────────────────────────────────────────────────
+    # Boilerplate & fall‑back to JSONAdapter on context overflow
+    # ──────────────────────────────────────────────────────────────────────────────
+
     def __init__(self, callbacks: Optional[list[BaseCallback]] = None):
         super().__init__(callbacks)
 
@@ -49,100 +55,63 @@ class ChatAdapter_md(Adapter):
     ) -> list[dict[str, Any]]:
         try:
             return super().__call__(lm, lm_kwargs, signature, demos, inputs)
-        except Exception as e:
-            # fallback to JSONAdapter
+        except (ContextWindowExceededError, AdapterParseError):
             from dspy.adapters.json_adapter import JSONAdapter
-
-            if isinstance(e, ContextWindowExceededError) or isinstance(self, JSONAdapter):
-                # On context window exceeded error or already using JSONAdapter, we don't want to retry with a different
-                # adapter.
-                raise e
             return JSONAdapter()(lm, lm_kwargs, signature, demos, inputs)
 
+    # ──────────────────────────────────────────────────────────────────────────────
+    # Prompt helpers
+    # ──────────────────────────────────────────────────────────────────────────────
+
     def format_field_description(self, signature: Type[Signature]) -> str:
-        return (
-            f"Your input fields are:\n{get_field_description_string(signature.input_fields)}\n"
-            f"Your output fields are:\n{get_field_description_string(signature.output_fields)}"
-        )
-
-    def format_field_structure(self, signature: Type[Signature]) -> str:
-        """
-        `ChatAdapter` requires input and output fields to be in their own sections, with section header using markers
-        `[[ ## field_name ## ]]`. An arbitrary field `completed` ([[ ## completed ## ]]) is added to the end of the
-        output fields section to indicate the end of the output fields.
-        """
-        parts = []
-        parts.append("All interactions will be structured in the following way, with the appropriate values filled in.")
-
-        def format_signature_fields_for_instructions(fields: Dict[str, FieldInfo]):
-            return self.format_field_with_value(
-                fields_with_values={
-                    FieldInfoWithName(name=field_name, info=field_info): translate_field_type(field_name, field_info)
-                    for field_name, field_info in fields.items()
-                },
-            )
-
-        parts.append(format_signature_fields_for_instructions(signature.input_fields))
-        parts.append(format_signature_fields_for_instructions(signature.output_fields))
-        parts.append("[[ ## completed ## ]]\n")
-        return "\n\n".join(parts).strip()
-
-    def format_task_description(self, signature: Type[Signature]) -> str:
-        instructions = textwrap.dedent(signature.instructions)
-        objective = ("\n" + " " * 8).join([""] + instructions.splitlines())
-        return f"In adhering to this structure, your objective is: {objective}"
+        inputs = ", ".join(signature.input_fields)
+        outputs = ", ".join(signature.output_fields)
+        return f"Inputs: {inputs}\nOutputs: {outputs}"
 
     def format_user_message_content(
         self,
         signature: Type[Signature],
-        inputs: dict[str, Any],
+        inputs: Optional[dict[str, Any]] = None,
         prefix: str = "",
         suffix: str = "",
         main_request: bool = False,
+        *_, **__,
     ) -> str:
-        messages = [prefix]
-        for k, v in signature.input_fields.items():
-            if k in inputs:
-                value = inputs.get(k)
-                formatted_field_value = format_field_value(field_info=v, value=value)
-                messages.append(f"[[ ## {k} ## ]]\n{formatted_field_value}")
+        """Compose the user message for the LM.
+        The *trajectory‑only* call path may supply `inputs=None`, so we guard for that.
+        """
+        inputs = inputs or {}
+        parts: list[str] = [prefix] if prefix else []
+
+        for key, val in inputs.items():
+            if key not in signature.input_fields:
+                continue  # ignore things like trajectory keys
+            parts.append(f"### {key}\n{format_field_value(signature.input_fields[key], val)}")
 
         if main_request:
-            output_requirements = self.user_message_output_requirements(signature)
-            if output_requirements is not None:
-                messages.append(output_requirements)
-
-        messages.append(suffix)
-        return "\n\n".join(messages).strip()
+            parts.append(self.user_message_output_requirements(signature))
+        if suffix:
+            parts.append(suffix)
+        return "\n\n".join(parts).strip()
 
     def user_message_output_requirements(self, signature: Type[Signature]) -> str:
-        """Returns a simplified format reminder for the language model.
-
-        In chat-based interactions, language models may lose track of the required output format
-        as the conversation context grows longer. This method generates a concise reminder of
-        the expected output structure that can be included in user messages.
-
-        Args:
-            signature (Type[Signature]): The DSPy signature defining the expected input/output fields.
-
-        Returns:
-            str: A simplified description of the required output format.
-
-        Note:
-            This is a more lightweight version of `format_field_structure` specifically designed
-            for inline reminders within chat messages.
-        """
-
-        def type_info(v):
-            if v.annotation is not str:
-                return f" (must be formatted as a valid Python {get_annotation_name(v.annotation)})"
-            else:
-                return ""
-
-        message = "Respond with the corresponding output fields, starting with the field "
-        message += ", then ".join(f"`[[ ## {f} ## ]]`{type_info(v)}" for f, v in signature.output_fields.items())
-        message += ", and then ending with the marker for `[[ ## completed ## ]]`."
-        return message
+        if len(signature.output_fields) == 1:
+            field = next(iter(signature.output_fields))
+            return (
+                f"Respond with **only** the value for `{field}` — no heading needed."
+            )
+        else:
+            field_lines = "\n".join(
+                f"* `# {name}` (or any heading level) … {END_SENTINEL}"  # guidance list
+                for name in signature.output_fields
+            )
+            return (
+                "Format each output block as:\n"
+                "    # <field_name>\n"
+                "    <value>\n"
+                f"    {END_SENTINEL}\n\n"
+                "The heading text must exactly match the field name; use *any* heading level."
+            )
 
     def format_assistant_message_content(
         self,
@@ -150,70 +119,89 @@ class ChatAdapter_md(Adapter):
         outputs: dict[str, Any],
         missing_field_message=None,
     ) -> str:
-        return self.format_field_with_value(
-            {
-                FieldInfoWithName(name=k, info=v): outputs.get(k, missing_field_message)
-                for k, v in signature.output_fields.items()
-            },
-        )
+        """Reference implementation for demos / finetune data."""
+        if len(outputs) == 1:
+            return next(iter(outputs.values()))
+        blocks: list[str] = []
+        for name, info in signature.output_fields.items():
+            val = outputs.get(name, missing_field_message)
+            blocks.append(
+                f"### {name}\n{format_field_value(info, val)}\n{END_SENTINEL}"
+            )
+        return "\n\n".join(blocks)
 
-    def parse(self, signature: Type[Signature], completion: str) -> dict[str, Any]:
-        sections = [(None, [])]
+    def format_field_structure(self, signature: Type[Signature]) -> str:
+        """Describe the exact input/output wire-format for the language model.
 
-        for line in completion.splitlines():
-            match = field_header_pattern.match(line.strip())
-            if match:
-                # If the header pattern is found, split the rest of the line as content
-                header = match.group(1)
-                remaining_content = line[match.end() :].strip()
-                sections.append((header, [remaining_content] if remaining_content else []))
-            else:
-                sections[-1][1].append(line)
-
-        sections = [(k, "\n".join(v).strip()) for k, v in sections]
-
-        fields = {}
-        for k, v in sections:
-            if (k not in fields) and (k in signature.output_fields):
-                try:
-                    fields[k] = parse_value(v, signature.output_fields[k].annotation)
-                except Exception as e:
-                    if self.run_mode == "unrestricted":
-                        # Multi-line or non-call cell: treat as unrestricted code block
-                        result_block = self._execute_unrestricted_block(v)
-                    else:
-                        result_block = _RESULT_TEMPLATE.format(tool_name="parse_error", result=str(e))
-            else:
-                fields[k] = v
-        if fields.keys() != signature.output_fields.keys():
-            raise AdapterParseError(
-                adapter_name="ChatAdapter",
-                signature=signature,
-                lm_response=completion,
-                parsed_result=fields,
+        This string becomes part of the system prompt and explains *how* the model
+        should lay out the fields.  For our Markdown-style adapter we keep the
+        description short and pragmatic – large models do not need excessive
+        verbosity.
+        """
+        if len(signature.output_fields) == 1:
+            field = next(iter(signature.output_fields))
+            return (
+                "Reply with the **value only** for the output field `"
+                f"{field}` – no markdown heading, no surrounding commentary."
+            )
+        else:
+            sentinel = END_SENTINEL
+            return (
+                "For *each* output field, reply using a markdown block that looks like:\n"
+                "    # <field_name>\n"
+                "    <value>\n"
+                f"    {sentinel}\n\n"
+                "You may pick any heading depth (e.g. `#`, `##`, ...), but the heading text\n"
+                "must match the field name *exactly*.  Finish **every** block with the sentinel\n"
+                f"`{sentinel}` on its own line."
             )
 
-        return fields
+    def format_task_description(self, signature: Type[Signature]) -> str:
+        """Return the high-level instructions for the task (verbatim from the signature)."""
+        return textwrap.dedent(signature.instructions or "").strip()
 
-    def format_field_with_value(self, fields_with_values: Dict[FieldInfoWithName, Any]) -> str:
-        """
-        Formats the values of the specified fields according to the field's DSPy type (input or output),
-        annotation (e.g. str, int, etc.), and the type of the value itself. Joins the formatted values
-        into a single string, which is is a multiline string if there are multiple fields.
+    # ──────────────────────────────────────────────────────────────────────────────
+    # Parsing logic
+    # ──────────────────────────────────────────────────────────────────────────────
 
-        Args:
-            fields_with_values: A dictionary mapping information about a field to its corresponding
-                value.
+    def _build_regex(self, signature: Type[Signature]):
+        """Compile a single regex that grabs *heading, body* pairs up to the sentinel."""
+        names_alt = "|".join(map(re.escape, signature.output_fields))
+        return re.compile(
+            rf"^#+\s*({names_alt})\s*$"       # heading (any level)
+            rf"([\s\S]*?)"                    # body (non‑greedy)
+            rf"^\s*{re.escape(END_SENTINEL)}\s*$",  # sentinel line
+            re.MULTILINE,
+        )
 
-        Returns:
-            The joined formatted values of the fields, represented as a string
-        """
-        output = []
-        for field, field_value in fields_with_values.items():
-            formatted_field_value = format_field_value(field_info=field.info, value=field_value)
-            output.append(f"[[ ## {field.name} ## ]]\n{formatted_field_value}")
+    def parse(self, signature: Type[Signature], completion: str) -> Dict[str, Any]:
+        outputs = signature.output_fields
+        # Fast path: one output → whole text.
+        if len(outputs) == 1:
+            single_key = next(iter(outputs))
+            return {single_key: parse_value(completion.strip(), outputs[single_key].annotation)}
 
-        return "\n\n".join(output).strip()
+        regex = self._build_regex(signature)
+        parsed: Dict[str, Any] = {}
+
+        for match in regex.finditer(completion):
+            field_name, body = match.group(1), match.group(2)
+            if field_name in outputs and field_name not in parsed:
+                parsed[field_name] = parse_value(body.strip(), outputs[field_name].annotation)
+
+        missing = set(outputs) - set(parsed)
+        if missing:
+            raise AdapterParseError(
+                adapter_name="MarkdownAdapter",
+                signature=signature,
+                lm_response=completion,
+                parsed_result=parsed,
+            )
+        return parsed
+
+    # ──────────────────────────────────────────────────────────────────────────────
+    # Finetune data helper (same pattern as ChatAdapter)
+    # ──────────────────────────────────────────────────────────────────────────────
 
     def format_finetune_data(
         self,
@@ -222,23 +210,10 @@ class ChatAdapter_md(Adapter):
         inputs: dict[str, Any],
         outputs: dict[str, Any],
     ) -> dict[str, list[Any]]:
-        """
-        Format the call data into finetuning data according to the OpenAI API specifications.
-
-        For the chat adapter, this means formatting the data as a list of messages, where each message is a dictionary
-        with a "role" and "content" key. The role can be "system", "user", or "assistant". Then, the messages are
-        wrapped in a dictionary with a "messages" key.
-        """
-        system_user_messages = self.format(  # returns a list of dicts with the keys "role" and "content"
-            signature=signature, demos=demos, inputs=inputs
-        )
-        assistant_message_content = self.format_assistant_message_content(  # returns a string, without the role
-            signature=signature, outputs=outputs
-        )
-        assistant_message = {"role": "assistant", "content": assistant_message_content}
-        messages = system_user_messages + [assistant_message]
+        messages = self.format(signature, demos, inputs)
+        assistant_content = self.format_assistant_message_content(signature, outputs)
+        messages.append({"role": "assistant", "content": assistant_content})
         return {"messages": messages}
-
 
 
 #%%
@@ -819,7 +794,7 @@ def evaluate_code(code: str) -> Any:
 
 import dspy
 lm = dspy.LM(model="groq/llama3-8b-8192")
-dspy.configure(lm = lm)
+dspy.configure(lm = lm, adapter=MarkdownAdapter())
 
 react = dspy.ReAct("question -> answer", tools=[evaluate_code])
 
@@ -829,7 +804,7 @@ r_tooljson.trajectory
 #%%
 import dspy
 lm = dspy.LM(model="groq/llama3-8b-8192")
-dspy.configure(lm = lm)
+dspy.configure(lm = lm, adapter=MarkdownAdapter())
 
 react_md = ReAct_md("question -> answer", run_mode="unrestricted")
 
@@ -842,7 +817,7 @@ r_md.trajectory
 
 import dspy
 lm = dspy.LM(model="groq/llama3-8b-8192")
-dspy.configure(lm = lm)
+dspy.configure(lm = lm, adapter=MarkdownAdapter())
 
 
 react = ReAct_md("question -> answer", run_mode="unrestricted")
@@ -856,7 +831,7 @@ import dspy
 import os
 os.environ['OPENAI_BASE_URL'] = "http://192.168.147.194:1234/v1"
 lm = dspy.LM(model="openai/qwen/qwen3-1.7b")
-dspy.configure(lm = lm)
+dspy.configure(lm = lm, adapter=MarkdownAdapter())
 #%%
 react = ReAct_md("question -> answer", run_mode="unrestricted")
 r_md = react(question="/no_think Calculate the compound interest for 1000000 at 2% for 10 years")
@@ -870,7 +845,7 @@ lm(" hello")
 
 import dspy
 lm = dspy.LM(model="groq/llama3-8b-8192")
-dspy.configure(lm = lm)
+dspy.configure(lm = lm, adapter=MarkdownAdapter())
 react = ReAct_md("question -> answer", run_mode="unrestricted")
 r_md = react(question="What is the biggest file in the current directory?")
 
@@ -895,7 +870,7 @@ r_md = react(question="What is the biggest file in the current directory?")
 #%%
 import dspy
 lm = dspy.LM(model="groq/llama3-8b-8192")
-dspy.configure(lm = lm)
+dspy.configure(lm = lm, adapter=MarkdownAdapter())
 react = ReAct_md("question -> answer", run_mode="unrestricted")
 r_md = react(question="What files are in the current directory?")
 print(r_md.answer)
@@ -906,7 +881,7 @@ print(r_md.answer)
 #%%
 import dspy
 lm = dspy.LM(model="groq/meta-llama/llama-4-maverick-17b-128e-instruct")
-dspy.configure(lm = lm)
+dspy.configure(lm = lm, adapter=MarkdownAdapter())
 react = ReAct_md("question -> answer", run_mode="unrestricted")
 r_md = react(question="When did I take the 3 latest Screenshots on this computer (look in the screenshots folder within pictures)?")
 print(r_md)
@@ -916,4 +891,3 @@ print(r_md)
 #     reasoning='To determine when the latest screenshots were taken, I accessed the file system to check the modification dates of the screenshot files in the Screenshots folder within the Pictures directory. Using Python, I listed the files in the Screenshots folder, filtered out directories, and sorted the files by their modification times. The three most recent modification dates were then converted to a human-readable format and presented.',
 #     answer='The latest screenshots on this computer were taken on the following dates:\n1. 2025-06-17 22:33:18\n2. 2025-06-17 22:27:44\n3. 2025-06-17 22:22:40'
 # )
-# %%

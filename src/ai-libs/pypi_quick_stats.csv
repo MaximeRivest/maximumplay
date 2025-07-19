@@ -1,0 +1,58 @@
+project,pypi_package,downloads_last_month,description
+LangChain,langchain,75645079.0,Building applications with LLMs through composability
+OpenAI,openai,72107813.0,The official Python library for the openai API
+anthropic,anthropic,13276203.0,The official Python library for the anthropic API
+LiteLLM,litellm,11062531.0,Library to easily interface with LLM API providers
+MCP,mcp,10378413.0,Model Context Protocol SDK
+Cohere,cohere,7186725.0,
+LangGraph,langgraph,6602288.0,"Building stateful, multi-actor applications with LLMs"
+LlamaIndex,llama-index,4018066.0,Interface between LLMs and your data
+Instructor,instructor,3145136.0,structured outputs for llm
+Ollama,ollama,2714269.0,The official Python client for Ollama.
+Groq,groq,2477008.0,The official Python library for the groq API
+Mistral,mistralai,2249615.0,Python Client SDK for the Mistral AI API.
+vLLM,vllm,2124689.0,A high-throughput and memory-efficient inference and serving engine for LLMs
+pydantic‑ai,pydantic-ai,1879432.0,Agent Framework / shim to use Pydantic with LLMs
+Outlines,outlines,1837296.0,Probabilistic Generative Model Programming
+LM‑Format‑Enforcer,lm-format-enforcer,1726953.0,"Enforce the output format (JSON Schema, Regex etc) of a language model"
+Semantic Kernel,semantic-kernel,1651782.0,Semantic Kernel Python SDK
+CrewAI,crewai,1457966.0,"Cutting-edge framework for orchestrating role-playing, autonomous AI agents. By fostering collaborat"
+Mem0,mem0ai,1399830.0,Long-term memory for AI Agents
+Agents SDK,openai-agents,1287848.0,OpenAI Agents SDK
+DSPy,dspy,1078179.0,DSPy
+DeepEval,deepeval,583556.0,The LLM Evaluation Framework
+Replicate,replicate,536018.0,Python client for Replicate
+Haystack,haystack-ai,401045.0,"LLM framework to build customizable, production-ready LLM applications. Connect components (models, "
+Together AI,together,376914.0,Python client for Together's Cloud Platform!
+Arize AI,arize,347021.0,A helper library to interact with Arize AI APIs
+SGLang,sglang,264834.0,SGLang is yet another fast serving framework for large language models and vision language models.
+Agno,agno,244721.0,Agno: a lightweight library for building Multi-Agent Systems
+Phidata,phidata,142495.0,"Build multi-modal Agents with memory, knowledge and tools."
+PromptFlow,promptflow,140562.0,Prompt flow Python SDK - build high-quality LLM apps
+AutoGen,autogen,103786.0,Alias package for ag2
+Guardrails,guardrails-ai,87243.0,Adding guardrails to large language models.
+LLM,llm,80033.0,CLI utility and Python library for interacting with Large Language Models from organizations like Op
+LangMem,langmem,78876.0,Prebuilt utilities for memory management and retrieval.
+Marvin,marvin,52120.0,a simple and powerful tool to get things done with AI
+AiSuite,aisuite,45005.0,Uniform access layer for LLMs
+Guidance,guidance,28593.0,A guidance language for controlling large language models.
+Swarm (agent swarm),swarms,22344.0,Swarms - TGSC
+Griptape,griptape,21186.0,"Modular Python framework for LLM workflows, tools, memory, and data."
+Mirascope,mirascope,17456.0,LLM abstractions that aren't obstructions
+LM Studio,lmstudio,16309.0,LM Studio Python SDK
+Ell,ell-ai,12939.0,ell - the language model programming library
+Langroid,langroid,12669.0,Harness LLMs with Multi-Agent Programming
+uAgents,uagents,3454.0,Lightweight framework for rapid agent-based development
+Claudette,claudette,2522.0,Claudette is Claude's friend
+MAX (Modular),modular,2458.0,A suite of AI libraries and tools that accelerates model serving and provides programmability all th
+Flowise,flowise,1860.0,Flowise SDK for Python to interact with the Flowise API.
+OpenPrompt,openprompt,1506.0,An open source framework for prompt-learning.
+BAML,baml,1243.0,
+PromptBench,promptbench,279.0,PromptBench is a powerful tool designed to scrutinize and analyze the interaction of large language 
+Lilypad,python-lilypad,256.0,An open-source prompt engineering framework.
+APE,ape-core,164.0,Ape: your AI prompt engineer
+Rivet,rivet,68.0,A Python-to-S3 interface with added convenience features.
+Promptex,promptex,22.0,Efficiently manage prompts used as input for GPT
+PROMST,,,
+Promptim,,,
+Vertex AI Prompt Optimizer,,,

@@ -1,0 +1,54 @@
+project,pypi_package,downloads_last_month,description,tags,primary_tag,confidence
+LangChain,langchain,75645079.0,Building applications with LLMs through composability,"['ai_programming', 'prompt_engineering', 'model_provider']",ai_programming,0.9
+OpenAI,openai,72107813.0,The official Python library for the openai API,"['model_provider', 'ai_programming']",model_provider,0.9
+anthropic,anthropic,13276203.0,The official Python library for the anthropic API,"['model_provider', 'ai_programming']",model_provider,0.9
+LiteLLM,litellm,11062531.0,Library to easily interface with LLM API providers,"['model_provider', 'ai_programming', 'agentic_ai']",ai_programming,0.85
+MCP,mcp,10378413.0,Model Context Protocol SDK,"['model_provider', 'ai_programming']",workflow_orchestration,0.85
+Cohere,cohere,7186725.0,,"['model_provider', 'ai_programming', 'prompt_engineering']",model_provider,0.8
+LangGraph,langgraph,6602288.0,"Building stateful, multi-actor applications with LLMs","['ai_programming', 'structured_output', 'workflow_orchestration']",workflow_orchestration,0.85
+LlamaIndex,llama-index,4018066.0,Interface between LLMs and your data,"['model_provider', 'hosting_provider', 'ai_programming']",retrieval_rag,0.8
+Instructor,instructor,3145136.0,structured outputs for llm,"['structured_output', 'ai_programming', 'model_provider']",structured_output,0.85
+Ollama,ollama,2714269.0,The official Python client for Ollama.,"['ai_programming', 'model_provider']",local_inference,0.9
+Groq,groq,2477008.0,The official Python library for the groq API,"['ai_programming', 'model_provider']",model_provider,0.9
+Mistral,mistralai,2249615.0,Python Client SDK for the Mistral AI API.,"['model_provider', 'ai_programming', 'workflow_orchestration']",model_provider,0.85
+vLLM,vllm,2124689.0,A high-throughput and memory-efficient inference and serving engine for LLMs,"['model_provider', 'hosting_provider', 'local_inference']",local_inference,0.85
+pydantic‑ai,pydantic-ai,1879432.0,Agent Framework / shim to use Pydantic with LLMs,"['model_provider', 'ai_programming']",agentic_ai,0.9
+Outlines,outlines,1837296.0,Probabilistic Generative Model Programming,"['model_provider', 'ai_programming', 'structured_output']",structured_output,0.85
+LM‑Format‑Enforcer,lm-format-enforcer,1726953.0,"Enforce the output format (JSON Schema, Regex etc) of a language model","['structured_output', 'evaluation_testing']",structured_output,0.9
+Semantic Kernel,semantic-kernel,1651782.0,Semantic Kernel Python SDK,"['ai_programming', 'structured_output', 'model_provider']",ai_programming,0.85
+Azure AI Inference,azure-ai-inference,1487031.0,Microsoft Azure AI Inference Client Library for Python,"[""model_provider""]",model_provider,0.9
+CrewAI,crewai,1457966.0,"Cutting-edge framework for orchestrating role-playing, autonomous AI agents. By fostering collaborat","['agentic_ai', 'workflow_orchestration', 'structured_output']",agentic_ai,0.85
+Mem0,mem0ai,1399830.0,Long-term memory for AI Agents,"['memory_state', 'ai_programming', 'agentic_ai']",memory_state,0.85
+Agents SDK,openai-agents,1287848.0,OpenAI Agents SDK,"['ai_programming', 'agentic_ai', 'model_provider']",agentic_ai,0.85
+DSPy,dspy,1078179.0,DSPy,"['ai_programming', 'structured_output', 'evaluation_testing']",ai_programming,0.85
+DeepEval,deepeval,583556.0,The LLM Evaluation Framework,"['evaluation_testing', 'ai_programming', 'model_provider']",evaluation_testing,0.85
+Replicate,replicate,536018.0,Python client for Replicate,"['model_provider', 'hosting_provider', 'workflow_orchestration']",model_provider,0.85
+Haystack,haystack-ai,401045.0,"LLM framework to build customizable, production-ready LLM applications. Connect components (models, ","['retrieval_rag', 'model_provider', 'hosting_provider']",retrieval_rag,0.85
+Together AI,together,376914.0,Python client for Together's Cloud Platform!,"['ai_programming', 'model_provider', 'hosting_provider']",model_provider,0.9
+Arize AI,arize,347021.0,A helper library to interact with Arize AI APIs,"['ai_programming', 'model_provider']",observability_monitoring,0.9
+SGLang,sglang,264834.0,SGLang is yet another fast serving framework for large language models and vision language models.,"['ai_programming', 'model_provider']",local_inference,0.9
+Agno,agno,244721.0,Agno: a lightweight library for building Multi-Agent Systems,"['agentic_ai', 'ai_programming', 'model_provider']",agentic_ai,0.85
+Phidata,phidata,142495.0,"Build multi-modal Agents with memory, knowledge and tools.","['ai_programming', 'memory_state', 'workflow_orchestration']",agentic_ai,0.85
+PromptFlow,promptflow,140562.0,Prompt flow Python SDK - build high-quality LLM apps,"['prompt_engineering', 'workflow_orchestration', 'ai_programming']",prompt_engineering,0.85
+AutoGen,autogen,103786.0,Alias package for ag2,"['model_provider', 'ai_programming', 'prompt_engineering']",agentic_ai,0.8
+Guardrails,guardrails-ai,87243.0,Adding guardrails to large language models.,"['ai_programming', 'evaluation_testing', 'observability_monitoring']",evaluation_testing,0.85
+LLM,llm,80033.0,CLI utility and Python library for interacting with Large Language Models from organizations like Op,"['model_provider', 'ai_programming', 'prompt_engineering']",ai_programming,0.85
+LangMem,langmem,78876.0,Prebuilt utilities for memory management and retrieval.,"['retrieval_rag', 'memory_state', 'model_provider']",memory_state,0.85
+Marvin,marvin,52120.0,a simple and powerful tool to get things done with AI,"['ai_programming', 'workflow_orchestration', 'model_provider']",ai_programming,0.85
+AiSuite,aisuite,45005.0,Uniform access layer for LLMs,"['ai_programming', 'model_provider', 'structured_output']",ai_programming,0.85
+Anthropic Bedrock,anthropic-bedrock,31146.0,The official Python library for the anthropic-bedrock API,"[""model_provider""]",model_provider,0.9
+Guidance,guidance,28593.0,A guidance language for controlling large language models.,"['ai_programming', 'agentic_ai', 'prompt_engineering']",ai_programming,0.85
+Swarm (agent swarm),swarms,22344.0,Swarms - TGSC,"['agentic_ai', 'workflow_orchestration', 'model_provider']",agentic_ai,0.85
+Griptape,griptape,21186.0,"Modular Python framework for LLM workflows, tools, memory, and data.","['ai_programming', 'workflow_orchestration', 'memory_state']",ai_programming,0.85
+Mirascope,mirascope,17456.0,LLM abstractions that aren't obstructions,"['model_provider', 'ai_programming', 'prompt_engineering']",ai_programming,0.85
+LM Studio,lmstudio,16309.0,LM Studio Python SDK,"['ai_programming', 'model_provider', 'hosting_provider']",local_inference,0.85
+Ell,ell-ai,12939.0,ell - the language model programming library,"['ai_programming', 'prompt_engineering']",ai_programming,0.9
+Langroid,langroid,12669.0,Harness LLMs with Multi-Agent Programming,"['agentic_ai', 'ai_programming', 'workflow_orchestration']",agentic_ai,0.85
+OpenRouter,openrouter,7817.0,Unified interface for LLM APIs,"['model_provider', 'ai_programming']",model_provider,0.9
+uAgents,uagents,3454.0,Lightweight framework for rapid agent-based development,"['agentic_ai', 'ai_programming', 'model_provider']",agentic_ai,0.85
+Claudette,claudette,2522.0,Claudette is Claude's friend,"['agentic_ai', 'prompt_engineering', 'memory_state']",prompt_engineering,0.8
+MAX (Modular),max,2512.0,The Modular Accelerated Xecution (MAX) framework,"['model_provider', 'ai_programming', 'hosting_provider']",local_inference,0.85
+Flowise,flowise,1860.0,Flowise SDK for Python to interact with the Flowise API.,"['model_provider', 'ai_programming', 'structured_output']",workflow_orchestration,0.75
+OpenPrompt,openprompt,1506.0,An open source framework for prompt-learning.,"['prompt_engineering', 'ai_programming', 'model_provider']",prompt_engineering,0.9
+BAML,baml,1243.0,,"['model_provider', 'ai_programming', 'agentic_ai']",structured_output,0.7
+PromptBench,promptbench,279.0,PromptBench is a powerful tool designed to scrutinize and analyze the interaction of large language ,"['prompt_engineering', 'ai_programming', 'structured_output']",evaluation_testing,0.85

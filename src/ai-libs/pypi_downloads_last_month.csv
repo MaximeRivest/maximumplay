@@ -1,0 +1,56 @@
+project,pypi_package,downloads_last_month
+LangChain,langchain,75645079.0
+OpenAI,openai,72107813.0
+anthropic,anthropic,13276203.0
+LiteLLM,litellm,11062531.0
+MCP,mcp,10378413.0
+Cohere,cohere,7186725.0
+LangGraph,langgraph,6602288.0
+LlamaIndex,llama-index,4018066.0
+Ollama,ollama,2714269.0
+Groq,groq,2477008.0
+Mistral,mistralai,2249615.0
+Outlines,outlines,1837296.0
+LM‑Format‑Enforcer,lm-format-enforcer,1726953.0
+Semantic Kernel,semantic-kernel,1651782.0
+CrewAI,crewai,1457966.0
+Agents SDK,openai-agents,1287848.0
+DSPy,dspy,1078179.0
+DeepEval,deepeval,583556.0
+Replicate,replicate,536018.0
+Haystack,haystack-ai,401045.0
+Together AI,together,376914.0
+Arize AI,arize,347021.0
+Agno,agno,244721.0
+Phidata,phidata,142495.0
+PromptFlow,promptflow,140562.0
+AutoGen,autogen,103786.0
+Guardrails,guardrails-ai,87243.0
+LLM,llm,80033.0
+LangMem,langmem,78876.0
+Marvin,marvin,52120.0
+AiSuite,aisuite,45005.0
+Guidance,guidance,28593.0
+Swarm (agent swarm),swarms,22344.0
+Griptape,griptape,21186.0
+Mirascope,mirascope,17456.0
+LM Studio,lmstudio,16309.0
+Langroid,langroid,12669.0
+uAgents,uagents,3454.0
+Claudette,claudette,2522.0
+Flowise,flowise,1860.0
+OpenPrompt,openprompt,1506.0
+BAML,baml,1243.0
+PromptBench,promptbench,279.0
+Lilypad,python-lilypad,256.0
+APE,ape-core,164.0
+Rivet,rivet,68.0
+Promptex,promptex,22.0
+Ell,ell,
+Instructor,instructor,
+Mem0,mem0,
+PROMST,,
+Promptim,,
+Redis (client),redis,
+Vertex AI Prompt Optimizer,,
+pydantic‑ai,pydanticai,

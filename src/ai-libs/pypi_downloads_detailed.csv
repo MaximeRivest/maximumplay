@@ -1,0 +1,55 @@
+project,pypi_package,downloads_last_month,downloads_without_mirrors
+LangChain,langchain,75645079.0,75684254.0
+OpenAI,openai,72107813.0,74250735.0
+LiteLLM,litellm,11062531.0,11985414.0
+MCP,mcp,10378413.0,10964436.0
+Cohere,cohere,7186725.0,7326037.0
+LangGraph,langgraph,6602288.0,6769033.0
+LlamaIndex,llama-index,4018066.0,3993725.0
+Instructor,instructor,3145136.0,2900586.0
+Ollama,ollama,2714269.0,2845693.0
+Groq,groq,2477008.0,2755227.0
+Mistral,mistralai,2249615.0,2294828.0
+pydantic‑ai,pydantic-ai,1879432.0,
+Outlines,outlines,1837296.0,1661361.0
+LM‑Format‑Enforcer,lm-format-enforcer,1726953.0,1519320.0
+Semantic Kernel,semantic-kernel,1651782.0,2987959.0
+CrewAI,crewai,1457966.0,1475881.0
+Mem0,mem0ai,1399830.0,1484955.0
+Agents SDK,openai-agents,1287848.0,1392328.0
+DSPy,dspy,1078179.0,1016017.0
+DeepEval,deepeval,583556.0,615920.0
+Replicate,replicate,536018.0,551603.0
+Haystack,haystack-ai,401045.0,397559.0
+Arize AI,arize,347021.0,269219.0
+Agno,agno,244721.0,288121.0
+Phidata,phidata,142495.0,141432.0
+PromptFlow,promptflow,140562.0,134057.0
+AutoGen,autogen,103786.0,109854.0
+Guardrails,guardrails-ai,87243.0,102953.0
+LLM,llm,80033.0,80769.0
+LangMem,langmem,78876.0,89792.0
+Marvin,marvin,52120.0,51046.0
+AiSuite,aisuite,45005.0,47113.0
+Guidance,guidance,28593.0,30868.0
+Swarm (agent swarm),swarms,22344.0,14594.0
+Griptape,griptape,21186.0,18124.0
+Mirascope,mirascope,17456.0,16325.0
+LM Studio,lmstudio,16309.0,16609.0
+Ell,ell-ai,12939.0,13575.0
+Langroid,langroid,12669.0,15233.0
+uAgents,uagents,3454.0,4229.0
+Claudette,claudette,2522.0,2267.0
+Flowise,flowise,1860.0,2425.0
+OpenPrompt,openprompt,1506.0,1084.0
+BAML,baml,1243.0,1068.0
+PromptBench,promptbench,279.0,295.0
+Lilypad,python-lilypad,256.0,334.0
+APE,ape-core,164.0,208.0
+Rivet,rivet,68.0,77.0
+Promptex,promptex,22.0,74.0
+PROMST,,,
+Promptim,,,
+Together AI,together,,
+Vertex AI Prompt Optimizer,,,
+anthropic,anthropic,,
