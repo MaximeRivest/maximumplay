@@ -90,5 +90,9 @@ Maybe a missing element in the mentionned spec is that there could be an artifac
 
 ## DSPy's Signature
 
-DSPy's signatures concerns themselves only with the inputs/outputs and not with the examples nor the judge. There are 2 other distinct object for that. I think they should all be orgnanised together into a Task object.
+DSPy's signatures concerns themselves only with the inputs/outputs and not with the examples nor the judge. There are 2 other distinct object for that. I think they should all be orgnanised together into a Task specification object.
+
+## A task specification object
+
+A task specification object, would contain all above mentionned elements, and they would have versionning (a la git) and attributions, was the instructions deduced? If so from what and by what? An optimized 
 
