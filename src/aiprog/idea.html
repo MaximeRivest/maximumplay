@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">The information flow</h1>
+<h1 class="title">Build well and you will be rewarded</h1>
 </div>
 
 
@@ -96,19 +96,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>A user has a task/goal/intent. They can specify it very clearly with a combination of these:</p>
+<p>These days, in coding, I see 4 main ways to build systems that solve a problem: 1. Do feature engineering and code a traditional software. 2. Use a specialized machine learning algorithm end-to-end, this include deep neural network (sam, etc). 3. Use an llm, llm workflow or llm with tools to do the task. 4. Use any of the above, repeatedly and/or combined.</p>
+<p>Combining all of the above is obviously the most promising approach, its only tradeoff is increase complexity and knowledge/skill requirement on the builder. Although, this complexity and the builder psychology in facing that complexity can be enough to wipe out all of the promised benefits of the compound approach if one is not careful in how it builds. Using any of the three and, potentially, their combination means that you most be skilled at all of them. It also means that you will have to learn and worry about design patterns and the tradeoffs of each and if you mix all three (or even any of the 3 with itself) all in one long linear flat logical flow, you may lose the edge that the combinaison promised because you will quickly be slowed down by the complexity. therefore you must build with care. focus on intent and you will be handsomely rewarded.</p>
+<section id="what-does-it-mean-to-focus-on-intent" class="level2">
+<h2 class="anchored" data-anchor-id="what-does-it-mean-to-focus-on-intent">What does it mean to focus on intent?</h2>
+<p>Another way to say it is: focus on defining the tasks components carefully and independently of the choosen or implemented solution. You can think of a program as a logical flow of focused task, within which the implementation details don’t matter. This is not a very novel or revolutionanry idea, it is the idea behind modular programming, functional programming, microservices, and declarative paradigms. However, what’s novel today is how crucial and effective this principle becomes when dealing with compound AI systems. But there is also one new requirement for this to be effective. Previously, the modular parts would be implemented in deterministic, (mostly) transparent, understandable and <strong>crucially</strong> testable components. To embrace machine learning and llms is to embrace and introduce stochasticity into your system. This means that the tradional: ‘does it work?’ question is changed to ‘how well does it work’ and each component have there own performance spectrum. It is thus crucial that a success criteria, evaluated through a set of example task input and outputs, and metrics be defined along with task input and output specification. Once you do that, you are truly ready to be careless about that internals of the task completing system. All you need to know is that, when given inputs of a certain type and profile outputs of required types and characteristics come out at a performance level that you can evaluate and check for ‘passing’ your performance threshold requirements. This Decoupling is extremely liberating and powerful as we can swap, modify, optimize the component independently and with confidence.</p>
+</section>
+<section id="how-do-you-define-a-component-intent" class="level2">
+<h2 class="anchored" data-anchor-id="how-do-you-define-a-component-intent">How do you define a component intent?</h2>
+<p>A user has a task, goal, or intent. They can specify it very clearly using a combination of the following:</p>
 <ul>
-<li>Examples (of what to do but could also be of what not to do)</li>
-<li>Inputs/Output specifications</li>
-<li>Metric/evaluation/rubric/judge/score</li>
-<li>Story/Instructions/hints/persona (analogies: do x like y)</li>
+<li>Examples (demonstrating what to do or not to do)</li>
+<li>Inputs/Outputs specifications</li>
+<li>Metrics/Evaluations/Rubrics/Judges/Scores*</li>
+<li>Stories/Instructions/Hints/Personas (analogies: “do X like Y”)</li>
 </ul>
-<p>Any of these could in theory be sufficient for a very intelligent entity to complete the task.</p>
-<section id="examples" class="level2">
-<h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<p>Take the task of applying French Canadian translation to written English text.</p>
-<p>This should be enough for a talented human to find the pattern and comply.</p>
-<div id="d9db1e85" class="cell" data-execution_count="1">
+<p>In theory, any single element might suffice for an intelligent entity to complete the task.</p>
+<section id="translating-from-english-text-into-french-canadian" class="level3">
+<h3 class="anchored" data-anchor-id="translating-from-english-text-into-french-canadian">Translating from English text into French Canadian</h3>
+<p>Consider the task of translating English text into French Canadian:</p>
+<section id="examples" class="level4">
+<h4 class="anchored" data-anchor-id="examples">Examples</h4>
+<p>The following should be enough for a talented human to find the pattern and comply:</p>
+<div id="999a8945" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>example_of_success <span class="op">=</span> {</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'english'</span>: [</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"I'm going to the convenience store."</span>,</span>
@@ -142,7 +152,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Je vais t’appeler ce soir."</span>,</span>
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Il se vente tout l’temps."</span>,</span>
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="st">"On a pris un café au Tim."</span>,</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Ferme la fenêtre, ça caille."</span>,</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Ferme la fenêtre, y fait frette."</span>,</span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">"J’ai un rendez-vous à trois heures."</span>,</span>
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Ils fêtent leur fête."</span>,</span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        <span class="st">"J’ai stationné dans l’fond."</span>,</span>
@@ -156,12 +166,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    ]</span>
 <span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>But very some other intelligent system it may not be enough and we could further clarify and flesh out the task specification by adding instructions, a judge, input/output schema.</p>
-<p>an instructions could look like this:</p>
+<p>However, for other intelligent systems, additional clarifications like instructions, judges, or input/output schemas might be necessary.</p>
+</section>
+<section id="instruction" class="level4">
+<h4 class="anchored" data-anchor-id="instruction">Instruction</h4>
+<p>Similarly to examples, these instruction could be sufficient:</p>
 <blockquote class="blockquote">
 <p>Translate the following English sentences into colloquial Quebec French. Preserve the informal, spoken register—use contractions, regional vocabulary (e.g., “dépanneur”, “frette”, “blonde”), and typical Quebec French syntax. Do not translate proper nouns like “Tim’s” or anglicisms that are common in Quebec French (e.g., “weekend”). Keep the tone casual and conversational.</p>
 </blockquote>
-<p>a judge could have those instructions:</p>
+</section>
+<section id="judge-or-metric" class="level4">
+<h4 class="anchored" data-anchor-id="judge-or-metric">Judge or metric</h4>
+<p>Or if you have a metric or a performance llm judge you can build an example set using them by searching for high scoring examples.</p>
+<p>A metric using code could hypothetically be built, like that:</p>
+<div id="d6b85374" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>is_quebec_form <span class="op">=</span> []</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> word <span class="kw">in</span> translated_text:</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> word <span class="kw">in</span> quebec_colloquial_word_set:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        is_quebec_form.append(<span class="dv">1</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        is_quebec_form.append(<span class="dv">0</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>mean(is_quebec_form)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Or, perhaps, more easily for this task a judge llms could be tuned and use:</p>
 <blockquote class="blockquote">
 <p>You are an expert Quebec French linguist. For each English sentence and its proposed French translation, evaluate:</p>
 <ol type="1">
@@ -173,31 +201,100 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Anglicisms</strong>: Are common Quebec anglicisms preserved when appropriate (e.g., “weekend”)? Score each translation from 1-5 on these criteria, with 5 being perfect. Provide brief feedback on any issues.</li>
 </ol>
 </blockquote>
-<p>Or simply Input/Outputs specifications:</p>
+</section>
+<section id="task-inputoutput" class="level4">
+<h4 class="anchored" data-anchor-id="task-inputoutput">Task input/output</h4>
+<p>Often, if you are told what you will be given to complete a certain task and what you must return, it is enough for you to understand the intent of the person giving you the task.</p>
+<p>Input/Output specification could like something like that:</p>
 <blockquote class="blockquote">
 <ul>
 <li><strong>Input</strong>: A plain-text string in English.</li>
-<li><strong>Output</strong>: A single plain-text string in colloquial Quebec French that conveys the same meaning, using regional vocabulary, contractions, and anglicisms common in spoken Quebec French. No additional commentary or formatting.</li>
+<li><strong>Output</strong>: Plain-text colloquial Quebec French sentence, using regional vocabulary, contractions, and anglicisms common in spoken Quebec French.</li>
 </ul>
 </blockquote>
-<p>Maybe a missing element in the mentionned spec is that there could be an artifact that performs the task. If it is an opaque artifact, it can serve a similar purpose as the example, with the risk that it may be applied to the wrong input in the wrong ways. A transparent, understandable, or logical artifact contributes more to the clarity of the task specification, as instructions, examples, and input/output pairs can all be extracted from that type of artifact (a judge can also likely be trained). Interestingly, such an artifact does not solve the task forever, as we may wish to solve the task in more efficient ways or with different dependencies.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that, there, in building system with AI components there of confusingly, at least, two input and output types. That is:</p>
+<ul>
+<li>the inputs and outputs of the task-completing-system</li>
+<li>the inputs and outputs of the llm, often times, inside the trask completing system<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+</ul>
+</div>
+</div>
 </section>
-<section id="dspys-signature" class="level2">
-<h2 class="anchored" data-anchor-id="dspys-signature">DSPy’s Signature</h2>
-<p>DSPy’s signatures concern themselves only with the inputs and outputs and not with the examples or the judge. There are two other distinct objects for that. I think they should all be organized together into a task specification object.</p>
+<section id="artifacts" class="level4">
+<h4 class="anchored" data-anchor-id="artifacts">Artifacts</h4>
+<p>Artifacts, meaning a thing that successfuly complete the task can also specify or at least contribute to specifying a task intent. This one is somewhat special comparing the the other specification mechanism we just want through as there are 2 types of artifacts and the are both indirect specification mechanism, meaning from the artifact we can deduce specifications. There are opaque and there are transparent artififacts. An opaque artifact (black box deep neural net) acts similarly to examples but might lead to misuse. A transparent, understandable artifact contributes significantly to task clarity, enabling extraction of instructions, examples, input/output pairs, and potentially training judges (open source program or mathematical formula). While an understandable artifact can greatly help in specifying the task it does not, however, resolve the task permanently, as future needs may require efficiency improvements or different dependencies.</p>
 </section>
-<section id="a-task-specification-object" class="level2">
-<h2 class="anchored" data-anchor-id="a-task-specification-object">A Task Specification Object</h2>
+</section>
+</section>
+<section id="how-do-you-do-intent-oriented-programming" class="level2">
+<h2 class="anchored" data-anchor-id="how-do-you-do-intent-oriented-programming">How do you do Intent-Oriented Programming?</h2>
+<p>I am not sure anybody yet completly know how to do that but here is my current thinking on this.</p>
+<section id="task-specification-object" class="level3">
+<h3 class="anchored" data-anchor-id="task-specification-object">Task Specification Object</h3>
+<p>First, you need to have a place where you define task specifications, there should be one source of truth of each task. This could be in a separate file, or a separate section in a file or a seperate modules, etc. Let’s call that a Task specification Object.</p>
 <p>A task specification object would contain all the above-mentioned elements, and they would have versioning (à la git) and attributions. Were the instructions deduced? If so, from what and by what?</p>
-<p>One should be careful with the task specification object, as there is a fine line between specifying a task and optimizing a system that aims at completing the task successfully. A specification should be general; it should aim to be coherent, and brevity is better than verbosity. Anything that would not help the majority of Intelligent Entities in interpreting the task and successfully completing it should be a concern for the optimizer.</p>
+<p>One should be careful with the task specification object, as there is a fine line between specifying a task and optimizing a system that aims to complete the task successfully. A specification should be general; it should aim to be coherent, and brevity is better than verbosity. Anything that would not help the majority of Intelligent Entities interpret the task and successfully complete it should be a concern for the optimizer.</p>
 </section>
-<section id="optimization" class="level2">
-<h2 class="anchored" data-anchor-id="optimization">Optimization</h2>
-<p>Optimization is a process where you take a working system—meaning it can, in theory, go from inputs to outputs, but it does not currently do so in a satisfactory way. It is not optimization to define and construct the task-completing system.</p>
-<hr>
+<section id="compiler" class="level3">
+<h3 class="anchored" data-anchor-id="compiler">Compiler</h3>
+<p>Then will need a place where you turn a task spec into something that, at the very least, attempt to complete the task. The action necessary to go from task spec to a program that a tentatively complete the task could be could referred to as compiling. In the sense that you are compiling a task spec into a program, the system doing that could be called a compiler. That compiler generally would need to be told about what particular AI component to target (analoguous to hardware components<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>) in general the target is a model + provider endpoint (where the model could be weight on your computer and provider could be your own inference code; but often it would be a commercial provider (e.g groq, cerebras, bedrock, openai, anthropic, openrouter, ollama, vllm, etc) and a model id, generally a string).</p>
+<section id="adapters" class="level4">
+<h4 class="anchored" data-anchor-id="adapters">Adapters</h4>
+<p>Given that, a powerful compiler would be able to pick adapters so that your task specified inputs and outputs can be formated for llm inputs and parsed from llm outputs automatically.</p>
+<p>Adapters handle practical issues that arise when interfacing general system logic with specialized AI components. Their role is to abstract away friction caused by specific constraints or idiosyncrasies of powerful but less flexible AI components interfaces.</p>
+<p>Adapters primarily manage two areas:</p>
+<ol type="1">
+<li>Input Formatting: Converting general or domain-specific inputs into the precise formats AI models expect (tokenization, padding, embedding formats, API call structures).</li>
+<li>Output Parsing: Interpreting and translating model outputs back into clearly specified, structured forms suitable for downstream processing or evaluation.</li>
+</ol>
+<p>AI components, especially neural networks or external APIs, are notable for:</p>
+<ul>
+<li>Limited flexibility regarding accepted inputs.</li>
+<li>Limited flexibility in output structure or format.</li>
+<li>Complex constraints often accepted due to their significant value and leverage.</li>
+<li>High computational and operational costs, necessitating careful management.</li>
+</ul>
+<p>Adapters mitigate these constraints, simplifying the logical composition and enabling developers and AI practitioners to concentrate on specifying tasks clearly rather than managing cumbersome AI-specific plumbing.</p>
+</section>
+<section id="optimization-flags" class="level4">
+<h4 class="anchored" data-anchor-id="optimization-flags">Optimization flags</h4>
+<p>Upon compiling, optimization flags could be provided, for instance few-shot demos could be added into the prompt, of AI persona could be defined, same goes for a specific that of generation ‘think stepbystep’ and style of adapter using JSON or XML etc. Those are compilation tags that are too specific to a certain compilation and model to be in the specification they are nevertheless extremely important and powerfull to drive an AI component’s performance.</p>
+<p>Optimization involves refining a working system—capable of processing inputs to outputs but not yet satisfactorily. Defining and constructing task-completing systems through logical programming, task specification composition, and adapter creation are distinct from optimization activities. Although the optimization process may unearth missing Task Specifications, a Task Specification can itself be optimized, but its optimisation goal should be <strong>generally</strong> leading to successful task-completing system implementation and optimisation.</p>
+<p>Optimization is a process where you take a working system—meaning it can, in theory, go from inputs to outputs, but it does not currently do so in a satisfactory way. It is not optimization to define and construct the task-completing system. Logically programming the composition and interaction of task specification as well as creating adapters (shims between a limited set of input to the AI component and fron the AI component to the limites set of acceptable ouputs) are the activities concern with defining and constructing the task-completing system.</p>
+</section>
+<section id="the-compilers-advantage" class="level4">
+<h4 class="anchored" data-anchor-id="the-compilers-advantage">The compilers’ advantage</h4>
+<p>And so given a task specification, optimization flags and AI component target a program can be compiled automatically thanks to the compiler picking previously defined adapters (formatters or parsers) and the resulting program can be evaluated using a combination of judge, metric, and example set. That is how I would build programs that uses AI for completing their tasks. This has the advantage of opening the door a to optimization, easily and confidently changing AI component target.</p>
+</section>
+</section>
+<section id="ai-program-composition" class="level3">
+<h3 class="anchored" data-anchor-id="ai-program-composition">Ai program composition</h3>
+<p>Orthogonally to compilation you can compose programs together in very powerfull, maintainable and very importantly ever improving systems. As a new AI component comes out you can easily changed the compilation target, evaluate and if satisfactory change to the improve AI component.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>To build systems that age well, treat every task as a contract: state what must happen, not how. Encode that contract in a single, versioned Task-Spec Object—examples, metrics, I/O schemas, and nothing more. Hand it to a compiler that knows how to translate the contract into calls to whatever AI component (LLM, model, or rule engine) happens to be fastest, cheapest or most accurate today. Let adapters absorb the messy realities of tokens, JSON quirks, rate limits. Measure against the specifications; this keeps the door open for painless swaps when better models appear.</p>
 </section>
 
-</main>
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>sometimes for llm performance reason we may want to give it a role/personna, some fewshots examples, maybe a list of tools that would not general need to be specified to a human or any other system completing the task, or maybe a generating strategy like think step-by-step, all of those are llms inputs but not task inputs. Some extra llm ouptuts would including thinking traces, tool calling traces, etc.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>as with hardware AI components, especially neural networks or external APIs, are notable for: Limited flexibility regarding accepted inputs, Limited flexibility in output structure or format. Complex constraints often accepted due to their significant value and leverage. High computational and operational costs, necessitating careful management.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
