@@ -1,0 +1,22 @@
+# Demo of Data Analytics setup
+
+First, as always we import data.
+
+```{python}
+import pandas as pd
+
+data = pd.read_csv('demodata.csv')
+
+```
+
+Let's make a plot.
+
+
+```{python}
+import matplotlib.pyplot as plt
+plt.plot(data['date'], data['value'])
+plt.xlabel('Date')
+plt.ylabel('Value')
+plt.show()
+
+```
