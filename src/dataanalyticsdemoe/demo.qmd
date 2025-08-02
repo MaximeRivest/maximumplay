@@ -9,14 +9,19 @@ data = pd.read_csv('demodata.csv')
 
 ```
 
-Let's make a plot.
+Let's make a plot. Using  plotnine in python and save it in plots folder
 
 
 ```{python}
-import matplotlib.pyplot as plt
-plt.plot(data['date'], data['value'])
-plt.xlabel('Date')
-plt.ylabel('Value')
-plt.show()
+import plotnine as p
 
+p1 = p.ggplot(data, p.aes(x='date', y='value')) + p.geom_point()
+p1
+```
+
+Let's now save it. 
+
+
+```{python}
+p1.save('plots/plot1.png')
 ```

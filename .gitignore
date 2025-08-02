@@ -12,3 +12,7 @@ wheels/
 .venv
 
 .env
+
+*.png
+*.pdf
+*.svg
